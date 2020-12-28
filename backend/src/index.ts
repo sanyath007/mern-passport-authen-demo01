@@ -26,29 +26,35 @@ const app = express();
 
 // MIDDLEWARES
 app.use(express.json());
-app.use(cors({ origin: "http:localhost:3000", credentials: true }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(session({ secret: "supersecret", resave: true, saveUninitialized: true }));
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 
 //PASSPORT
-passport.use(new LocalStrategy((email, password, done) => {
-    User.findOne({ email }, (err, user: any) => {
-        if (err) throw err;
-        if(!user) return done(null, false);
+passport.use(new LocalStrategy(
+    {usernameField:"email", passwordField:"password"},
+    (username, password, done) => {
+        User.findOne({ email: username }, (err, user: any) => {
+            if (err) {
+                console.log("Error from db");            
+                throw err
+            };
+            if(!user) return done(null, false, { message: 'Incorrect username.' });
 
-        bcrypt.compare(password, user.password, (err, result) => {
-            if (err) throw err;
+            bcrypt.compare(password, user.password, (err, isMatch) => {
+                if (err) throw err;
 
-            if (result === true) {
-                return done(null, user);
-            } else {
-                return done(null, false);
-            }
+                if (isMatch === true) {
+                    return done(null, user);
+                } else {
+                    return done(null, false, { message: 'Incorrect password.' });
+                }
+            });
         });
-    });
-}));
+    }
+));
 
 passport.serializeUser((user: any, cb) => {
     cb(null, user.id);
@@ -98,8 +104,7 @@ app.post('/login', passport.authenticate("local"), (req, res) => {
 });
 
 app.get('/user', async (req, res) => {
-    const user = await User.find();
-    res.send(user)
+    res.send(req.user)
 })
 
 app.listen(4000, () => console.log("Server started..."));
