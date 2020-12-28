@@ -5,6 +5,7 @@ import AdminPage from './pages/AdminPage';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import './main.css';
 
 function App() {
   return (
