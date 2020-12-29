@@ -5,8 +5,9 @@ import AdminPage from './pages/AdminPage';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
-import './main.css';
+import Register from './pages/Register';
 import Context from './pages/Context';
+import './main.css';
 
 function App() {
   return (
@@ -17,8 +18,9 @@ function App() {
         <Switch>
           <Route path='/' exact component={HomePage} />
           <Route path='/admin' exact component={AdminPage} />
-          <Route path='/login' exact component={Login} />
           <Route path='/profile' exact component={Profile} />
+          <Route path='/login' exact component={Login} />
+          <Route path='/register' exact component={Register} />
         </Switch>
       </Context>
     </Router>
