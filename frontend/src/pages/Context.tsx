@@ -1,10 +1,18 @@
-import React, { createContext, PropsWithChildren } from 'react'
+import React, { createContext, PropsWithChildren, useState, useEffect } from 'react'
+import axios from 'axios'
 
 export const myContext = createContext<any>({});
 
 function Context(props: PropsWithChildren<any>) {
+    const [user, setUser] = useState<any>()
+
+    useEffect(() => {
+        axios.get("http://localhost:4000/user", { withCredentials: true })
+        .then(res => setUser(res.data))
+        .catch(err => console.log(err))        
+    }, [])
     return (
-        <myContext.Provider value={1000}>{props.children}</myContext.Provider>
+        <myContext.Provider value={user}>{props.children}</myContext.Provider>
     )
 }
 

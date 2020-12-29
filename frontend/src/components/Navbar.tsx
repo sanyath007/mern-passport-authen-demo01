@@ -11,7 +11,7 @@ function Navbar() {
 
             {ctx ? (
                 <>
-                    { ctx.isAdmin ? <Link to="/admin">Admin</Link> : null }
+                    { ctx?.isAdmin ? <Link to="/admin">Admin</Link> : null }
                     <Link to="/profile">Profile</Link>
                     <Link to="/logout">Logout</Link>
                 </>
