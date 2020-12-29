@@ -13,18 +13,9 @@ function Login() {
             withCredentials: true
         }).then(res => {
             console.log(res.data)
+            window.location.href = "/"
         }).catch(err => {
             console.log(err.response)
-        })
-    }
-
-    const getUser = () => {
-        axios.get('http://localhost:4000/user', {
-            withCredentials: true
-        }).then(res => {
-            console.log(res.data)
-        }).catch(err => {
-            console.log(err)
         })
     }
 
@@ -42,7 +33,6 @@ function Login() {
                 onChange={ e => setPassword(e.target.value) }
             />
             <button onClick={ handleLogin }>Login</button>
-            <button onClick={ getUser }>Get User Thats Logged In</button>
         </div>
     )
 }
