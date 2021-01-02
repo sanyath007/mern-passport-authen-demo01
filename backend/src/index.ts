@@ -94,7 +94,7 @@ app.post('/register', async (req: Request, res: Response) => {
                 password: hashedPassword
             });
             await newUser.save();
-            res.send("Success");
+            res.send("success");
         }
     });
 });
@@ -105,6 +105,11 @@ app.post('/login', passport.authenticate("local"), (req, res) => {
 
 app.get('/user', async (req, res) => {
     res.send(req.user)
-})
+});
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    res.send('success');
+});
 
 app.listen(4000, () => console.log("Server started..."));

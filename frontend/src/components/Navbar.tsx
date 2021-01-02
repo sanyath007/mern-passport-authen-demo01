@@ -1,10 +1,24 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { myContext } from '../pages/Context';
+import axios from 'axios';
 
 function Navbar() {
     const ctx = useContext(myContext);
     
+    const logout = () => {
+        axios.get('http://localhost:4000/logout', {
+            withCredentials: true
+        })
+        .then(res => {
+            console.log(res);            
+            if (res.data === "success") {
+                window.location.href = "/";
+            }
+        })
+        .catch(err => console.log(err));
+    };
+
     return (
         <div className="NavContainer">
             <Link to="/">Home</Link>
@@ -13,7 +27,7 @@ function Navbar() {
                 <>
                     { ctx?.isAdmin ? <Link to="/admin">Admin</Link> : null }
                     <Link to="/profile">Profile</Link>
-                    <Link to="/logout">Logout</Link>
+                    <a onClick={logout}>Logout</a>
                 </>
             ) : (
                 <>
