@@ -139,9 +139,9 @@ app.get('/users', authMiddleware, async (req, res) => {
     });
 });
 
-app.delete('/user', authMiddleware, async (req, res) => {
-    const { id } = req.body;
-
+app.delete('/user/:id', authMiddleware, async (req, res) => {
+    const { id } = req.params;
+    
     await User.findByIdAndDelete(id, (err: Error, docs: any) => {
         if (err) throw err;
 
