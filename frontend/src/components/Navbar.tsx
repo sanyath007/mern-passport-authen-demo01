@@ -10,8 +10,7 @@ function Navbar() {
         axios.get('http://localhost:4000/logout', {
             withCredentials: true
         })
-        .then(res => {
-            console.log(res);            
+        .then(res => {           
             if (res.data === "success") {
                 window.location.href = "/";
             }
