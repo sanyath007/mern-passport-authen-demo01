@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import passport from 'passport';
 import passportLocal from 'passport-local';
@@ -72,6 +72,16 @@ passport.deserializeUser((id: string, cb) => {
     });
 });
 
+const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    console.log("This is auth middleware");
+
+    if (req.user) {
+        next();
+    } else {
+        res.send("ERROR: You have not permission to do that!!");
+    }
+};
+
 // ROUTES
 app.post('/register', async (req: Request, res: Response) => {
     const { name, email, password } = req?.body;
@@ -103,13 +113,31 @@ app.post('/login', passport.authenticate("local"), (req, res) => {
     res.send("Successfully authenticated")
 });
 
+app.get('/logout', (req, res) => {
+    req.logout();
+    res.send('success');
+});
+
 app.get('/user', async (req, res) => {
     res.send(req.user)
 });
 
-app.get('/logout', (req, res) => {
-    req.logout();
-    res.send('success');
+app.get('/users', authMiddleware, async (req, res) => {
+    await User.find({}, (err: Error, data: IUser) => {
+        if (err) throw err;
+
+        res.send(data);
+    });
+});
+
+app.delete('/user', authMiddleware, async (req, res) => {
+    const { id } = req.body;
+
+    await User.findByIdAndDelete(id, (err: Error, docs: any) => {
+        if (err) throw err;
+
+        res.send('success');
+    })
 });
 
 app.listen(4000, () => console.log("Server started..."));
