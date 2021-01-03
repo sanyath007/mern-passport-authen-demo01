@@ -72,11 +72,20 @@ passport.deserializeUser((id: string, cb) => {
     });
 });
 
+// Auth Middleware to authorize user that have admin role
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    console.log("This is auth middleware");
+    const { user }: any = req;
 
-    if (req.user) {
-        next();
+    if (user) {
+        User.findOne({ email: user.email }, (err: Error, doc: IUser) => {
+            if (err) throw err;
+            if (doc?.isAdmin) {
+                next();
+            } else {
+                res.send("ERROR: You have not permission to do that!!");
+            }
+        });
+
     } else {
         res.send("ERROR: You have not permission to do that!!");
     }

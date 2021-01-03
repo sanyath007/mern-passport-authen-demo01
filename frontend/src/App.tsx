@@ -11,7 +11,6 @@ import './main.css';
 
 function App() {
   const ctx = useContext(myContext);
-  console.log(ctx);
   
   return (
     <Router>      
